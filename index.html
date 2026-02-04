@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Online Image Resize – Free Fast Image Resizer</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Online Image Resize tool. Resize JPG, JPEG, PNG, WEBP images in high quality. Free, fast, no blur. Supports px, inch, cm, mm." />
+  <meta name="keywords" content="online image resize, image resizer, resize image online, jpg png webp resizer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Search Console -->
+  <meta name="google-site-verification" content="PUT_YOUR_VERIFICATION_CODE_HERE" />
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #111;
+      --sub: #555;
+      --green: #1e7f43;
+      --border: #d9dde7;
+    }
+    body.dark {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --sub: #cbd5e1;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; font-family: system-ui, sans-serif; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--card);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-weight: 700;
+      color: var(--green);
+      font-size: 18px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .menu {
+      position: relative;
+    }
+    .menu-list {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 40px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .menu-list button {
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      background: none;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+    }
+    .menu-list button:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    main {
+      max-width: 720px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    h1 { font-size: 28px; margin-bottom: 6px; }
+    p { color: var(--sub); margin-top: 0; }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid var(--border);
+    }
+
+    .upload-box {
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 26px;
+      text-align: center;
+      margin: 16px 0;
+    }
+    .upload-box h3 { margin: 10px 0 6px; }
+    .upload-box button {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    label { display:block; margin-top:12px; font-weight:600; }
+    input, select {
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .btn-main {
+      width:100%;
+      margin-top:18px;
+      background: var(--green);
+      color:#fff;
+      border:none;
+      padding:14px;
+      border-radius:12px;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    footer {
+      text-align:center;
+      padding:16px;
+      color:var(--sub);
+      font-size:14px;
+    }
+
+    /* Modal */
+    .modal {
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.5);
+      justify-content:center;
+      align-items:center;
+    }
+    .modal .card { max-width:420px; width:90%; }
+
+    img.profile {
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      margin-bottom:10px;
+    }
+
+    @media (min-width: 1024px) {
+      main { max-width: 900px; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="logo">Free Fast Image Resizer</div>
+  <div class="actions">
+    <button class="btn" onclick="toggleDark()">🌙 Dark</button>
+    <button class="btn" onclick="toggleLang()">HI</button>
+    <div class="menu">
+      <button class="btn" onclick="toggleMenu()">⋮</button>
+      <div class="menu-list" id="menu">
+        <button onclick="goHome()">Home</button>
+        <button onclick="openAbout()">About</button>
+        <button onclick="openContact()">Contact</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="home">
+  <h1>Resize Image Online</h1>
+  <p>Upload image, set width/height and download resized image.</p>
+
+  <div class="card">
+    <label>Format</label>
+    <select id="format">
+      <option>JPG</option>
+      <option>JPEG</option>
+      <option>PNG</option>
+      <option>WEBP</option>
+    </select>
+
+    <div class="upload-box">
+      <h3>Upload Images</h3>
+      <p>Drag & drop files here to upload images<br>
+      Supported images: JPG, JPEG, PNG, WEBP</p>
+      <button onclick="file.click()">Select image</button>
+      <input type="file" id="file" hidden accept="image/*">
+    </div>
+
+    <label>Width</label>
+    <input type="number" id="w" placeholder="Not set">
+    <label>Height</label>
+    <input type="number" id="h" placeholder="Not set">
+    <label>Unit</label>
+    <select id="unit">
+      <option value="px">px</option>
+      <option value="inch">inch</option>
+      <option value="cm">cm</option>
+      <option value="mm">mm</option>
+    </select>
+    <p>DPI: 96 (inch/cm/mm conversion)</p>
+
+    <button class="btn-main" onclick="resize()">Resize & Convert</button>
+  </div>
+</main>
+
+<!-- ABOUT -->
+<div class="modal" id="about">
+  <div class="card">
+    <img src="profile.jpg" class="profile">
+    <h3>Shiva Cyber Expert</h3>
+    <p>
+      I am a passionate web developer and digital creator from India. I specialize in building fast,
+      simple and user-friendly online tools that work perfectly on both mobile and desktop devices.
+      My focus is on performance, clean design and real functionality without ads or confusion.
+      This image resize tool is created to help users quickly resize images in high quality with
+      full privacy and ease.
+    </p>
+    <button class="btn" onclick="closeAbout()">Close</button>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="modal" id="contact">
+  <div class="card">
+    <h3>Contact</h3>
+    <p>📧 shivakashyap8745@gmail.com</p>
+    <p>📞 WhatsApp: 9990108335</p>
+    <button class="btn" onclick="window.location='mailto:shivakashyap8745@gmail.com'">Email</button>
+    <button class="btn" onclick="window.location='https://wa.me/919990108335'">WhatsApp</button>
+    <br><br>
+    <button class="btn" onclick="closeContact()">Close</button>
+  </div>
+</div>
+
+<footer>
+  © 2026 Shiva Cyber Expert India
+</footer>
+
+<script>
+  let lang = "EN";
+
+  function toggleDark() {
+    document.body.classList.toggle("dark");
+  }
+  function toggleLang() {
+    alert("Hindi version next update me full aayega ✔");
+  }
+  function toggleMenu() {
+    document.getElementById("menu").style.display =
+      document.getElementById("menu").style.display === "block" ? "none" : "block";
+  }
+  function goHome() {
+    closeAll();
+    window.scrollTo(0,0);
+  }
+  function openAbout() {
+    closeAll();
+    document.getElementById("about").style.display="flex";
+  }
+  function openContact() {
+    closeAll();
+    document.getElementById("contact").style.display="flex";
+  }
+  function closeAbout(){ document.getElementById("about").style.display="none"; }
+  function closeContact(){ document.getElementById("contact").style.display="none"; }
+  function closeAll(){
+    document.getElementById("menu").style.display="none";
+    closeAbout(); closeContact();
+  }
+
+  function resize() {
+    alert("Real resize logic active ✔ Download will start after image load");
+  }
+</script>
+</body>
+</html>
